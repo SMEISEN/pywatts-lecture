@@ -1,0 +1,1 @@
+git+https://github.com/KIT-IAI/pyWATTS.git#master
