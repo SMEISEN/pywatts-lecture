@@ -21,8 +21,10 @@ def simple_outlier_filter(x: xr.DataArray):
     :return:
     """
     filtered = x.values
-    filtered[---] = np.NAN  # implement a function to filter extreme values and
-                            # assign NAN values (to be interpolated in the next step)
+    # !! Task 1 !!
+    # implement a function to filter extreme values and
+    # assign NAN values (to be interpolated in the next step)
+    filtered[---] = np.NAN
 
     return numpy_to_xarray(filtered, x, "filtered_outlier")
 
@@ -40,47 +42,93 @@ if __name__ == "__main__":
     # Load and split data
     data = pd.read_csv("data/getting_started_data.csv", index_col="time", parse_dates=["time"],
                        date_parser=lambda x: datetime.strptime(x, "%Y-%m-%d %H:%M:%S"))
-    train_data = ---  # select from start to 2018-6-1
-    test_data = ---  #select from 2018-6-1 end
+
+    # !! Task 2 !!
+    # Create a train data set with data select from the start of the full data set until to 2018-6-1
+    train_data = ---
+
+    # !! Task 3 !!
+    # Create a test data set with data from 2018-6-1 to the end of the full data set
+    test_data = ---
 
     forecasting_pipeline = Pipeline("results/forecasting")
     # Handle Outlier
-    filtered_outlier = FunctionModule(simple_outlier_filter)(x=---)  # select input data
-    interpolated_ts = ---  # create linear interpolator step
+
+    # !! Task 4 !!
+    # select input data as the column "load_power_statistics"
+    filtered_outlier = FunctionModule(simple_outlier_filter)(x=---)
+
+    # !! Task 5 !!
+    # Include a linear interpolator step (check the pyWATTS documentation)
+    interpolated_ts = ---
 
     # Scale the TS
     scaler = SKLearnWrapper(StandardScaler())
-    scaled_ts = scaler(x=interpolated_ts, callbacks=---)  # create line plot callback
+
+    # !! Task 6 !!
+    # Include a line plot callback
+    scaled_ts = scaler(x=interpolated_ts, callbacks=---)
     reshaped_ts = FunctionModule(lambda x: numpy_to_xarray(x.values.reshape((-1,)), x, "reshaped"))(x=scaled_ts)
 
     # Extract the Features
-    calendar_features = ---  # extract calendar features
-    hist_values = ---  # create -24h lag feature
+
+    # !! Task 7 !!
+    # extract calendar features (check the pyWATTS documentation)
+    calendar_features = ---
+
+    # !! Task 8 !!
+    # Shift the original time series 24h to create a -24h lag feature
+    hist_values = ---
 
     # Create samples for forecasting
-    calendar_input = ---  # sample calendar feature for a 24h multiple output forecast horizon
-    historical_load = ---   # sample lag feature for a 24h multiple output forecast horizon
-    target = ---  # sample target for a 24h multiple output forecast horizon
+
+    # !! Task 9 !!
+    # Create a sample of the calendar features for a 24h multiple output forecast horizon
+    calendar_input = ---
+
+    # !! Task 10 !!
+    # Create a sample of the historical load lag features for a 24h multiple output forecast horizon
+    historical_load = ---
+
+    # !! Task 11 !!
+    # Create a sample of the target data for a 24h multiple output forecast horizon
+    target = ---
 
     # Debug step, can be used to inspect the output data of a step, e.g., the sampled calendar feature
     dummy_step = FunctionModule(debug_fn)(x=calendar_input)
 
     # Cutoff parts with invalid values to the previous sampling
-    calendar_input = ---  # slice data to remove zeros from sampling
-    historical_load = ---  # slice data to remove zeros from sampling
-    target = ---  # slice data to remove zeros from sampling
+
+    # !! Task 12 !!
+    # slice the calendar_input data to remove zeros from sampling
+    calendar_input = ---
+
+    # !! Task 13 !!
+    # slice the historical data to remove zeros from sampling
+    historical_load = ---
+
+    # !! Task 14 !!
+    # Slice the target data to remove zeros from sampling
+    target = ---
 
     # Add the forecasting method
     forecast = SKLearnWrapper(LinearRegression())(x=historical_load, calendar=calendar_input, target=target,
                                                   callbacks=[LinePlotCallback("Predicted Data")])
 
+    # !! Task 15 !!
+    # Include a line plot & a csv callback
     rescaled_forecast = scaler(x=forecast, use_inverse_transform=True, computation_mode=ComputationMode.Transform,
-                               callbacks=[---])  # create line plot & csv callback
-    # Train the pipeline
+                               callbacks=[---])
+
+
+    # !! Task 16 !!
+    # Write the command to train the pipeline
     ---
 
     # Add a evaluation metric
     RMSE()(lr_forecast=forecast, y=target)
 
-    # Test the pipeline
+
+    # !! Task 17 !!
+    # Write the command to test the pipeline
     ---
