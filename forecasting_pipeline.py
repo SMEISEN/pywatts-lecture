@@ -26,7 +26,7 @@ def simple_outlier_filter(x: xr.DataArray):
     # assign NAN values (to be interpolated in the next step)
     filtered[---] = np.NAN
 
-    return numpy_to_xarray(filtered, x, "filtered_outlier")
+    return numpy_to_xarray(filtered, x)
 
 def debug_fn(x: xr.DataArray):
     """
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     # !! Task 6 !!
     # Include a line plot callback
     scaled_ts = scaler(x=interpolated_ts, callbacks=---)
-    reshaped_ts = FunctionModule(lambda x: numpy_to_xarray(x.values.reshape((-1,)), x, "reshaped"))(x=scaled_ts)
+    reshaped_ts = FunctionModule(lambda x: numpy_to_xarray(x.values.reshape((-1,)), x))(x=scaled_ts)
 
     # Extract the Features
 
